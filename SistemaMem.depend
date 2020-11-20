@@ -1,0 +1,18 @@
+# depslib dependency file v1.0
+1605841442 source:c:\users\mfsr1\onedrive\escritorio\sistemamem\main.cpp
+	"mem.h"
+	"Proceso.h"
+	<iostream>
+	<math.h>
+	<vector>
+
+1605829775 source:c:\users\mfsr1\onedrive\escritorio\sistemamem\src\mem.cpp
+
+1605833985 c:\users\mfsr1\onedrive\escritorio\sistemamem\include\mem.h
+
+1605831156 source:c:\users\mfsr1\onedrive\escritorio\sistemamem\src\proceso.cpp
+
+1605840431 c:\users\mfsr1\onedrive\escritorio\sistemamem\include\proceso.h
+	<utility>
+	<vector>
+
