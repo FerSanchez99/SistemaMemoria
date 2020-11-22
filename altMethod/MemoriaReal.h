@@ -19,6 +19,7 @@ class MemoriaReal {
         std::vector<std::pair<int, int>> memoria = std::vector<std::pair<int, int>>(paginasLibres, std::pair<int, int>(-1, -1));
     public:
         MemoriaReal();
+        int getTamBytes();
         int getPaginasLibres();
         void setPaginasLibres(int);
         int asignarPagina(int, int);
@@ -26,6 +27,7 @@ class MemoriaReal {
         void asignarProceso(Proceso&, MemoriaSwap&, std::unordered_map<int, Proceso>&);
         void swapOut(MemoriaSwap&, Proceso&, std::pair<int, int>);
         void liberarProceso(Proceso);
+        void limpiarMemoria();
 };
 
 #endif

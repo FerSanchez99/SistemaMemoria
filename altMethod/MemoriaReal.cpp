@@ -3,6 +3,10 @@
 
 MemoriaReal::MemoriaReal() {}
 
+int MemoriaReal::getTamBytes() {
+    return tamBytes;
+}
+
 int MemoriaReal::getPaginasLibres() {
     return paginasLibres;
 }
@@ -115,4 +119,10 @@ void MemoriaReal::liberarProceso(Proceso proceso) {
     FIFO.remove_if([idProceso](std::pair<int, int> par){
         return par.second == idProceso;
     });
+}
+
+void MemoriaReal::limpiarMemoria() {
+    FIFO.clear();
+    paginasLibres = tamBytes / tamPaginas;
+    memoria = std::vector<std::pair<int, int>>(paginasLibres, std::pair<int, int>(-1, -1));
 }

@@ -18,11 +18,13 @@ class MemoriaSwap {
         std::vector<std::pair<int, int>> memoria = std::vector<std::pair<int, int>>(paginasLibres, std::pair<int, int>(-1, -1));
     public:
         MemoriaSwap();
+        int getTamBytes();
         int getPaginasLibres();
         void setPaginasLibres(int);
         int asignarPagina(int, int);
         void swapIn(Proceso&, MemoriaReal&, int, std::unordered_map<int, Proceso>&);
         void liberarProceso(Proceso);
+        void limpiarMemoria();
 };
 
 #endif

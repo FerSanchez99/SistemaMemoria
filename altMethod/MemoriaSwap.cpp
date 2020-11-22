@@ -3,6 +3,10 @@
 
 MemoriaSwap::MemoriaSwap() {}
 
+int MemoriaSwap::getTamBytes() {
+    return tamBytes;
+}
+
 int MemoriaSwap::getPaginasLibres() {
     return paginasLibres;
 }
@@ -65,4 +69,9 @@ void MemoriaSwap::liberarProceso(Proceso proceso) {
             std::cout << "Se libero proceso " << idProceso << " en memoria swap en pagina " << dir_enMemoria.first << std::endl;
         }
     }
+}
+
+void MemoriaSwap::limpiarMemoria() {
+    paginasLibres = tamBytes / tamPaginas;
+    memoria = std::vector<std::pair<int, int>>(paginasLibres, std::pair<int, int>(-1, -1));
 }

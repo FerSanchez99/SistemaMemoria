@@ -13,10 +13,12 @@ class Proceso {
     public:
         Proceso();
         Proceso(int, int);
+        void operator=(const Proceso&);
         int getId();
         int getTamPaginas();
         int getTamBytes();
         std::vector<std::pair<int, bool>> getTablaDeMapeo();
+        std::pair<int, bool> getPagTablaDeMapeo(int);
         void setIndexTablaDeMapeo(int, std::pair<int, bool>);
 };
 
