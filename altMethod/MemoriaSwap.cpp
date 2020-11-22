@@ -40,8 +40,8 @@ void MemoriaSwap::swapIn(Proceso& proceso, MemoriaReal& real, int paginaVirtual,
 
         proceso.setIndexTablaDeMapeo(paginaVirtual, std::make_pair(paginaReal, true));
 
-        std::cout << "SwapIn - proceso " << idProceso << " de memoria swap en pagina " << paginaSwap 
-            << " se movio a memoria real en pagina " << paginaReal << std::endl;
+        std::cout << "SwapIn - PROCESO" << idProceso << " de Memoria SWAP en pagina " << paginaSwap 
+            << " se movio a Memoria REAL en pagina " << paginaReal << std::endl;
         return;
     }
 
@@ -51,10 +51,11 @@ void MemoriaSwap::swapIn(Proceso& proceso, MemoriaReal& real, int paginaVirtual,
     proceso.setIndexTablaDeMapeo(paginaVirtual, std::make_pair(paginaProcesoReal.first, true));
     listaProcesos[paginaProcesoReal.second.second].setIndexTablaDeMapeo(paginaProcesoReal.second.first, std::make_pair(paginaSwap, false));
 
-    std::cout << "Intercambio entre Real y Swap - SwapIn-SwapOut - proceso " << idProceso << " de memoria swap "
-            << " en pagina " << paginaSwap << " se movio a memoria real en pagina " << paginaProcesoReal.first
-            << " - proceso " << paginaProcesoReal.second.second << " de memoria real en pagina "
-            << paginaProcesoReal.first << " se movio a memoria swap en pagina " << paginaSwap << std::endl;
+    std::cout << "Intercambio entre REAL y SWAP - SwapIn-SwapOut:" << std::endl
+            << "SwapIn - PROCESO " << idProceso << " de Memoria SWAP "
+            << " en pagina " << paginaSwap << " se movio a Memoria REAL en pagina " << paginaProcesoReal.first << std::endl
+            << "SwapOut - PROCESO " << paginaProcesoReal.second.second << " de Memoria REAL en pagina "
+            << paginaProcesoReal.first << " se movio a Memoria SWAP en pagina " << paginaSwap << std::endl;
 }
 
 void MemoriaSwap::liberarProceso(Proceso proceso) {
@@ -66,7 +67,7 @@ void MemoriaSwap::liberarProceso(Proceso proceso) {
             paginasLibres++;
             memoria[dir_enMemoria.first] = std::make_pair(-1, -1);
 
-            std::cout << "Se libero proceso " << idProceso << " en memoria swap en pagina " << dir_enMemoria.first << std::endl;
+            std::cout << "Se libero PROCESO " << idProceso << " en Memoria SWAP en pagina " << dir_enMemoria.first << std::endl;
         }
     }
 }

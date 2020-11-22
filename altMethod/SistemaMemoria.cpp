@@ -13,7 +13,8 @@ bool SistemaMemoria::existeProceso(int idProceso) {
 
 bool SistemaMemoria::cargarProceso(int idProceso, int tamBytes) {
     Proceso proceso(idProceso, tamBytes);
-    if (proceso.getTamBytes() > real.getTamBytes() || (real.getPaginasLibres() + swap.getPaginasLibres()) < proceso.getTamBytes()) {
+    if (tamBytes > real.getTamBytes() ||
+        (real.getPaginasLibres() + swap.getPaginasLibres()) < tamBytes / proceso.getTamPaginas() + (tamBytes % proceso.getTamPaginas() != 0)) {
         return false;
     }
     
@@ -28,9 +29,9 @@ void SistemaMemoria::accederDirVirtualProceso(int dirVirtual, int idProceso, int
     int paginaVirtual = dirVirtual / proceso.getTamPaginas();
     auto pagProceso = proceso.getPagTablaDeMapeo(paginaVirtual);
     if (pagProceso.second) {
-        std::cout << "Direccion virtual " << dirVirtual << " de proceso " << idProceso
+        std::cout << "Direccion virtual " << dirVirtual << " de PROCESO " << idProceso
                 << " esta en la direccion real " << pagProceso.first * proceso.getTamPaginas() + (dirVirtual % proceso.getTamPaginas())
-                << " de la memoria real" << std::endl;
+                << " de la Memoria REAL" << std::endl;
         return;
     }
 
@@ -39,9 +40,9 @@ void SistemaMemoria::accederDirVirtualProceso(int dirVirtual, int idProceso, int
     proceso = listaProcesos[idProceso];
     paginaVirtual = dirVirtual / proceso.getTamPaginas();
     pagProceso = proceso.getPagTablaDeMapeo(paginaVirtual);
-    std::cout << "Direccion virtual " << dirVirtual << " de proceso " << idProceso
+    std::cout << "Direccion virtual " << dirVirtual << " de PROCESO " << idProceso
             << " esta en la direccion real " << pagProceso.first * proceso.getTamPaginas() + (dirVirtual % proceso.getTamPaginas())
-            << " de la memoria real" << std::endl;
+            << " de la Memoria REAL" << std::endl;
 }
 
 void SistemaMemoria::liberarProceso(int idProceso) {

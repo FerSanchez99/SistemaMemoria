@@ -21,7 +21,8 @@ int main() {
             // load proceso a memoria
             case 'P':
                 cin >> tamProceso >> idProceso;
-                
+                cout << "Cargar PROCESO con ID " << idProceso << " de tamano " << tamProceso << endl;
+
                 if (tamProceso <= 0) {
                     cout << "Tamano del proceso invalido, intente con otro" << endl;
                     break;
@@ -37,6 +38,9 @@ int main() {
             //acceso a la dir virtual de proceso
             case 'A': 
                 cin >> dirVirtual >> idProceso >> bitModificacion;
+                if (bitModificacion == 1) cout << "Modificar ";
+                else cout << "Acceder a ";
+                cout << "direccion virtual " << dirVirtual << " del PROCESO con ID " << idProceso << endl;
 
                 if (!memoriaAdmin.existeProceso(idProceso)) {
                     cout << "No existe proceso con este id, intente con otro" << endl;
@@ -52,6 +56,8 @@ int main() {
             //liberar memoria real
             case 'L':
                 cin >> idProceso;
+                cout << "Liberar PROCESO con ID " << idProceso << endl;
+
                 if (!memoriaAdmin.existeProceso(idProceso)) {
                     cout << "No existe proceso con este id, intente con otro" << endl;
                     break;
@@ -63,7 +69,8 @@ int main() {
             case 'C':  
                 break;
             //limpiar y dar estadisticas
-            case 'F':  
+            case 'F': 
+                cout << "Reiniciando memorias... mostrar estadisticas" << endl;
                 memoriaAdmin.limpiarMemorias();
                 break;
             default:

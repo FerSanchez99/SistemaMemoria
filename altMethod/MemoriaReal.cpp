@@ -56,7 +56,7 @@ void MemoriaReal::asignarProceso(Proceso& proceso, MemoriaSwap& swap, std::unord
                 pags++;
                 paginasLibres--;
 
-                std::cout << "Se asigno proceso " << idProceso << "en memoria real en pagina " << i << std::endl;
+                std::cout << "Se asigno PROCESO " << idProceso << " en Memoria REAL en pagina " << i << std::endl;
             }
         }
 
@@ -73,7 +73,7 @@ void MemoriaReal::asignarProceso(Proceso& proceso, MemoriaSwap& swap, std::unord
             pags++;
             paginasLibres--;
 
-            std::cout << "Se asigno proceso " << idProceso << "en memoria real en pagina " << i << std::endl;
+            std::cout << "Se asigno PROCESO " << idProceso << " en Memoria REAL en pagina " << i << std::endl;
         }
     }
 
@@ -87,7 +87,7 @@ void MemoriaReal::asignarProceso(Proceso& proceso, MemoriaSwap& swap, std::unord
         memoria[front.first].second = idProceso;
         proceso.setIndexTablaDeMapeo(pags, std::make_pair(front.first, true));
 
-        std::cout << "Se asigno proceso " << idProceso << "en memoria real en pagina " << front.first << std::endl;
+        std::cout << "Se asigno PROCESO " << idProceso << " en Memoria REAL en pagina " << front.first << std::endl;
 
         FIFO.push_back(std::make_pair(front.first, idProceso));
         pags++;
@@ -99,8 +99,8 @@ void MemoriaReal::swapOut(MemoriaSwap& swap, Proceso& proceso, std::pair<int, in
 
     proceso.setIndexTablaDeMapeo(memoria[paginaReal.first].first, std::make_pair(paginaSwap, false));
 
-    std::cout << "SwapOut - proceso " << paginaReal.second << "de memoria real en pagina " << paginaReal.first 
-            << " se movio a memoria swap en pagina " << paginaSwap << std::endl;
+    std::cout << "SwapOut - PROCESO " << paginaReal.second << " de Memoria REAL en pagina " << paginaReal.first 
+            << " se movio a Memoria SWAP en pagina " << paginaSwap << std::endl;
 }
 
 void MemoriaReal::liberarProceso(Proceso proceso) {
@@ -112,7 +112,7 @@ void MemoriaReal::liberarProceso(Proceso proceso) {
             paginasLibres++;
             memoria[dir_enMemoria.first] = std::make_pair(-1, -1);
 
-            std::cout << "Se libero proceso " << idProceso << "en memoria real en pagina " << dir_enMemoria.first << std::endl;
+            std::cout << "Se libero PROCESO " << idProceso << " en Memoria REAL en pagina " << dir_enMemoria.first << std::endl;
         }
     }
 
