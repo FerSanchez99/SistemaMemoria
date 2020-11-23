@@ -1,7 +1,21 @@
 #include "MemoriaReal.h"
 #include <iostream>
 
-MemoriaReal::MemoriaReal() {}
+MemoriaReal::MemoriaReal() {
+    esFIFO = true;
+}
+
+MemoriaReal::MemoriaReal(bool esFIFO) {
+    this->esFIFO = esFIFO;
+}
+
+bool MemoriaReal::esPoliticaFIFO() {
+    return esFIFO;
+}
+
+void MemoriaReal::setPoliticaFIFO(bool esFIFO) {
+    this->esFIFO = esFIFO;
+}
 
 int MemoriaReal::getTamBytes() {
     return tamBytes;
@@ -18,7 +32,7 @@ void MemoriaReal::setPaginasLibres(int paginasLibres) {
 int MemoriaReal::asignarPagina(int paginaVirtual, int idProceso) {
     for (int i = 0; i < memoria.size(); i++) {
         if (memoria[i].second == -1) {
-            FIFO.push_back(std::make_pair(i, idProceso));
+            politicaRemplazoLista.push_back(std::make_pair(i, idProceso));
             memoria[i].first = paginaVirtual;
             memoria[i].second = idProceso;
             paginasLibres--;
@@ -31,11 +45,11 @@ int MemoriaReal::asignarPagina(int paginaVirtual, int idProceso) {
 }
 
 std::pair<int, std::pair<int, int>> MemoriaReal::intercambiaRealSwap(int paginaVirtual, int idProceso) {
-    auto front = FIFO.front();
-    FIFO.pop_front();
+    auto front = politicaRemplazoLista.front();
+    politicaRemplazoLista.pop_front();
     auto intercambioReal = std::make_pair(front.first, memoria[front.first]);
 
-    FIFO.push_back(std::make_pair(front.first, idProceso));
+    politicaRemplazoLista.push_back(std::make_pair(front.first, idProceso));
     memoria[front.first].first = paginaVirtual;
     memoria[front.first].second = idProceso;
 
@@ -49,7 +63,7 @@ void MemoriaReal::asignarProceso(Proceso& proceso, MemoriaSwap& swap, std::unord
     if (paginasProceso <= paginasLibres) {
         for (int i = 0, pags = 0; i < memoria.size() && pags < paginasProceso; i++) {
             if (memoria[i].second == -1) {
-                FIFO.push_back(std::make_pair(i, idProceso));
+                politicaRemplazoLista.push_back(std::make_pair(i, idProceso));
                 memoria[i].first = pags;
                 memoria[i].second = idProceso;
                 proceso.setIndexTablaDeMapeo(pags, std::make_pair(i, true));
@@ -66,7 +80,7 @@ void MemoriaReal::asignarProceso(Proceso& proceso, MemoriaSwap& swap, std::unord
     int pags = 0;
     for (int i = 0; i < memoria.size() && paginasLibres > 0; i++) {
         if (memoria[i].second == -1) {
-            FIFO.push_back(std::make_pair(i, idProceso));
+            politicaRemplazoLista.push_back(std::make_pair(i, idProceso));
             memoria[i].first = pags;
             memoria[i].second = idProceso;
             proceso.setIndexTablaDeMapeo(pags, std::make_pair(i, true));
@@ -78,8 +92,8 @@ void MemoriaReal::asignarProceso(Proceso& proceso, MemoriaSwap& swap, std::unord
     }
 
     while (pags < paginasProceso) {
-        auto front = FIFO.front();
-        FIFO.pop_front();
+        auto front = politicaRemplazoLista.front();
+        politicaRemplazoLista.pop_front();
         
         swapOut(swap, listaProcesos[front.second], front);
 
@@ -89,7 +103,7 @@ void MemoriaReal::asignarProceso(Proceso& proceso, MemoriaSwap& swap, std::unord
 
         std::cout << "Se asigno PROCESO " << idProceso << " en Memoria REAL en pagina " << front.first << std::endl;
 
-        FIFO.push_back(std::make_pair(front.first, idProceso));
+        politicaRemplazoLista.push_back(std::make_pair(front.first, idProceso));
         pags++;
     }
 }
@@ -116,13 +130,18 @@ void MemoriaReal::liberarProceso(Proceso proceso) {
         }
     }
 
-    FIFO.remove_if([idProceso](std::pair<int, int> par){
+    politicaRemplazoLista.remove_if([idProceso](std::pair<int, int> par){
         return par.second == idProceso;
     });
 }
 
 void MemoriaReal::limpiarMemoria() {
-    FIFO.clear();
+    politicaRemplazoLista.clear();
     paginasLibres = tamBytes / tamPaginas;
     memoria = std::vector<std::pair<int, int>>(paginasLibres, std::pair<int, int>(-1, -1));
+}
+
+void MemoriaReal::aplicarLRU(int pagReal, int idProceso) {
+    politicaRemplazoLista.remove(std::make_pair(pagReal, idProceso));
+    politicaRemplazoLista.push_back(std::make_pair(pagReal, idProceso));
 }

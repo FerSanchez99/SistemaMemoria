@@ -15,10 +15,14 @@ class MemoriaReal {
         const int tamBytes = 2048;
         const int tamPaginas = 16;
         int paginasLibres = tamBytes / tamPaginas;
-        std::list<std::pair<int, int>> FIFO;
+        bool esFIFO;
+        std::list<std::pair<int, int>> politicaRemplazoLista;
         std::vector<std::pair<int, int>> memoria = std::vector<std::pair<int, int>>(paginasLibres, std::pair<int, int>(-1, -1));
     public:
         MemoriaReal();
+        MemoriaReal(bool);
+        bool esPoliticaFIFO();
+        void setPoliticaFIFO(bool);
         int getTamBytes();
         int getPaginasLibres();
         void setPaginasLibres(int);
@@ -28,6 +32,7 @@ class MemoriaReal {
         void swapOut(MemoriaSwap&, Proceso&, std::pair<int, int>);
         void liberarProceso(Proceso);
         void limpiarMemoria();
+        void aplicarLRU(int, int);
 };
 
 #endif

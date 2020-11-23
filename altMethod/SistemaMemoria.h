@@ -13,6 +13,7 @@ class SistemaMemoria {
         MemoriaSwap swap;
     public:
         SistemaMemoria();
+        SistemaMemoria(bool);
         Proceso getProceso(int);
         bool existeProceso(int);
         bool cargarProceso(int, int);

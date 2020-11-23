@@ -3,6 +3,10 @@
 
 SistemaMemoria::SistemaMemoria() { }
 
+SistemaMemoria::SistemaMemoria(bool esFIFO) {
+    real.setPoliticaFIFO(esFIFO);
+}
+
 Proceso SistemaMemoria::getProceso(int idProceso) {
     return listaProcesos[idProceso];
 }
@@ -29,6 +33,9 @@ void SistemaMemoria::accederDirVirtualProceso(int dirVirtual, int idProceso, int
     int paginaVirtual = dirVirtual / proceso.getTamPaginas();
     auto pagProceso = proceso.getPagTablaDeMapeo(paginaVirtual);
     if (pagProceso.second) {
+        if (!real.esPoliticaFIFO()) {
+            real.aplicarLRU(pagProceso.first, idProceso);
+        }
         std::cout << "Direccion virtual " << dirVirtual << " de PROCESO " << idProceso
                 << " esta en la direccion real " << pagProceso.first * proceso.getTamPaginas() + (dirVirtual % proceso.getTamPaginas())
                 << " de la Memoria REAL" << std::endl;
