@@ -8,6 +8,7 @@
 #include <vector>
 #include <unordered_map>
 
+
 class MemoriaReal;
 
 class MemoriaSwap {
@@ -22,7 +23,7 @@ class MemoriaSwap {
         int getPaginasLibres();
         void setPaginasLibres(int);
         int asignarPagina(int, int);
-        void swapIn(Proceso&, MemoriaReal&, int, std::unordered_map<int, Proceso>&);
+        void swapIn(Proceso&, MemoriaReal&, int, std::unordered_map<int, Proceso>&, double&, std::pair<int,int>&);
         void liberarProceso(Proceso);
         void limpiarMemoria();
 };

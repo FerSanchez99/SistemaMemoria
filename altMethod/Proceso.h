@@ -10,6 +10,9 @@ class Proceso {
         int id;
         int tamBytes;
         std::vector<std::pair<int, bool>> tablaDeMapeo;
+        double dTimeStart;
+
+
     public:
         Proceso();
         Proceso(int, int);
@@ -17,9 +20,14 @@ class Proceso {
         int getId();
         int getTamPaginas();
         int getTamBytes();
+        double getTimeStart();
+        void setTimeStart(double);
+
+
         std::vector<std::pair<int, bool>> getTablaDeMapeo();
         std::pair<int, bool> getPagTablaDeMapeo(int);
         void setIndexTablaDeMapeo(int, std::pair<int, bool>);
+
 };
 
 #endif

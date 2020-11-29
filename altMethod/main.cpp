@@ -8,6 +8,7 @@
 
 using namespace std;
 
+
 int main() {
     char opcion = ' ';
     int tamProceso, idProceso, dirVirtual, bitModificacion;
@@ -19,6 +20,7 @@ int main() {
         opcion = toupper(opcion);
 
         switch (opcion) {
+
             // load proceso a memoria
             case 'P':
                 cin >> tamProceso >> idProceso;
@@ -35,6 +37,7 @@ int main() {
                     cout << "No hay suficiente espacio para este proceso" << endl;
                 }
 
+
                 cout << "----------- POLITICA LRU -------------------------" << endl;
                 if (tamProceso <= 0) {
                     cout << "Tamano del proceso invalido, intente con otro" << endl;
@@ -45,9 +48,11 @@ int main() {
                 else if (!memoriaAdminLRU.cargarProceso(idProceso, tamProceso)) {
                     cout << "No hay suficiente espacio para este proceso" << endl;
                 }
+
                 break;
+
             //acceso a la dir virtual de proceso
-            case 'A': 
+            case 'A':
                 cin >> dirVirtual >> idProceso >> bitModificacion;
                 if (bitModificacion == 1) cout << "Modificar ";
                 else cout << "Acceder a ";
@@ -61,6 +66,7 @@ int main() {
                     cout << "Direccion virtual invalida, intente con otra" << endl;
                 } else {
                     memoriaAdminFIFO.accederDirVirtualProceso(dirVirtual, idProceso, bitModificacion);
+
                 }
 
                 cout << "----------- POLITICA LRU -------------------------" << endl;
@@ -71,6 +77,7 @@ int main() {
                     cout << "Direccion virtual invalida, intente con otra" << endl;
                 } else {
                     memoriaAdminLRU.accederDirVirtualProceso(dirVirtual, idProceso, bitModificacion);
+
                 }
 
                 break;
@@ -83,6 +90,7 @@ int main() {
                 if (!memoriaAdminFIFO.existeProceso(idProceso)) {
                     cout << "No existe proceso con este id, intente con otro" << endl;
                 } else {
+
                     memoriaAdminFIFO.liberarProceso(idProceso);
                 }
 
@@ -90,18 +98,31 @@ int main() {
                 if (!memoriaAdminLRU.existeProceso(idProceso)) {
                     cout << "No existe proceso con este id, intente con otro" << endl;
                 } else {
+
                     memoriaAdminLRU.liberarProceso(idProceso);
                 }
 
                 break;
             //comentarios
-            case 'C':  
+            case 'C':
                 break;
             //limpiar y dar estadisticas
-            case 'F': 
+            case 'F':
                 cout << "Reiniciando memorias... mostrar estadisticas" << endl;
+
+                cout<<"///////////////// FIFO \\\\\\\\\\\\\\\\\\"<<endl;
+                memoriaAdminFIFO.getStat().printStats();
+
+                cout<<"///////////////// LRU  \\\\\\\\\\\\\\\\\\"<<endl;
+                memoriaAdminLRU.getStat().printStats();
+
+
+
+
                 memoriaAdminFIFO.limpiarMemorias();
                 memoriaAdminLRU.limpiarMemorias();
+
+
                 break;
             default:
                 break;

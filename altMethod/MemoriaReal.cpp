@@ -56,10 +56,11 @@ std::pair<int, std::pair<int, int>> MemoriaReal::intercambiaRealSwap(int paginaV
     return intercambioReal;
 }
 
-void MemoriaReal::asignarProceso(Proceso& proceso, MemoriaSwap& swap, std::unordered_map<int, Proceso>& listaProcesos) {
+void MemoriaReal::asignarProceso(Proceso& proceso, MemoriaSwap& swap, std::unordered_map<int, Proceso>& listaProcesos, double& dTime, int& swaps) {
     int paginasProceso = proceso.getTablaDeMapeo().size();
     int idProceso = proceso.getId();
-    
+
+    //no swap
     if (paginasProceso <= paginasLibres) {
         for (int i = 0, pags = 0; i < memoria.size() && pags < paginasProceso; i++) {
             if (memoria[i].second == -1) {
@@ -74,9 +75,12 @@ void MemoriaReal::asignarProceso(Proceso& proceso, MemoriaSwap& swap, std::unord
             }
         }
 
+        //se suma el tiempo que se tardo en cargar a memoria real
+        dTime = dTime + (paginasProceso*1.0);
         return;
     }
 
+    //meter las paginas del proceso si alcanzan lugar en la memoria real antes de un swap out
     int pags = 0;
     for (int i = 0; i < memoria.size() && paginasLibres > 0; i++) {
         if (memoria[i].second == -1) {
@@ -88,13 +92,15 @@ void MemoriaReal::asignarProceso(Proceso& proceso, MemoriaSwap& swap, std::unord
             paginasLibres--;
 
             std::cout << "Se asigno PROCESO " << idProceso << " en Memoria REAL en pagina " << i << std::endl;
+            dTime = dTime + 1.0;
         }
     }
 
+    //swap out de memoria
     while (pags < paginasProceso) {
         auto front = politicaRemplazoLista.front();
         politicaRemplazoLista.pop_front();
-        
+
         swapOut(swap, listaProcesos[front.second], front);
 
         memoria[front.first].first = pags;
@@ -102,7 +108,8 @@ void MemoriaReal::asignarProceso(Proceso& proceso, MemoriaSwap& swap, std::unord
         proceso.setIndexTablaDeMapeo(pags, std::make_pair(front.first, true));
 
         std::cout << "Se asigno PROCESO " << idProceso << " en Memoria REAL en pagina " << front.first << std::endl;
-
+        dTime = dTime + 2.0; //1 segundo por swap out y 1 segundo por loadear pagina
+        swaps++;
         politicaRemplazoLista.push_back(std::make_pair(front.first, idProceso));
         pags++;
     }
@@ -113,14 +120,14 @@ void MemoriaReal::swapOut(MemoriaSwap& swap, Proceso& proceso, std::pair<int, in
 
     proceso.setIndexTablaDeMapeo(memoria[paginaReal.first].first, std::make_pair(paginaSwap, false));
 
-    std::cout << "SwapOut - PROCESO " << paginaReal.second << " de Memoria REAL en pagina " << paginaReal.first 
+    std::cout << "SwapOut - PROCESO " << paginaReal.second << " de Memoria REAL en pagina " << paginaReal.first
             << " se movio a Memoria SWAP en pagina " << paginaSwap << std::endl;
 }
 
 void MemoriaReal::liberarProceso(Proceso proceso) {
     auto tablaProceso = proceso.getTablaDeMapeo();
     int idProceso = proceso.getId();
-    
+
     for (auto dir_enMemoria : tablaProceso) {
         if (dir_enMemoria.second) {
             paginasLibres++;

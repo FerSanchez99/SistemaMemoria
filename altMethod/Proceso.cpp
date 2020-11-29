@@ -5,6 +5,7 @@ Proceso::Proceso() { }
 Proceso::Proceso(int id, int tamBytes) {
     this->id = id;
     this->tamBytes = tamBytes;
+
     tablaDeMapeo = std::vector<std::pair<int, bool>>(tamBytes / tamPaginas + (tamBytes % tamPaginas != 0), std::pair<int, bool>(0, false));
 }
 
@@ -36,4 +37,12 @@ std::pair<int, bool> Proceso::getPagTablaDeMapeo(int pagina) {
 
 void Proceso::setIndexTablaDeMapeo(int idx, std::pair<int, bool> par) {
     tablaDeMapeo[idx] = par;
+}
+
+double Proceso::getTimeStart(){
+    return dTimeStart;
+}
+
+void Proceso::setTimeStart(double time){
+    dTimeStart = time;
 }

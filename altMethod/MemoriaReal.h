@@ -28,7 +28,7 @@ class MemoriaReal {
         void setPaginasLibres(int);
         int asignarPagina(int, int);
         std::pair<int, std::pair<int, int>> intercambiaRealSwap(int, int);
-        void asignarProceso(Proceso&, MemoriaSwap&, std::unordered_map<int, Proceso>&);
+        void asignarProceso(Proceso&, MemoriaSwap&, std::unordered_map<int, Proceso>&, double&,int&);
         void swapOut(MemoriaSwap&, Proceso&, std::pair<int, int>);
         void liberarProceso(Proceso);
         void limpiarMemoria();

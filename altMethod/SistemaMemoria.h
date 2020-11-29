@@ -4,6 +4,7 @@
 #include "Proceso.h"
 #include "MemoriaReal.h"
 #include "MemoriaSwap.h"
+#include "Stats.h"
 #include <unordered_map>
 
 class SistemaMemoria {
@@ -11,6 +12,7 @@ class SistemaMemoria {
         std::unordered_map<int, Proceso> listaProcesos;
         MemoriaReal real;
         MemoriaSwap swap;
+        Stats stats;
     public:
         SistemaMemoria();
         SistemaMemoria(bool);
@@ -20,6 +22,7 @@ class SistemaMemoria {
         void accederDirVirtualProceso(int, int, int);
         void liberarProceso(int);
         void limpiarMemorias();
+        Stats getStat();
 };
 
 #endif
