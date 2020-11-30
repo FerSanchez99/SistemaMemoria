@@ -39,10 +39,24 @@ void Proceso::setIndexTablaDeMapeo(int idx, std::pair<int, bool> par) {
     tablaDeMapeo[idx] = par;
 }
 
+
+
+///////////////
+//// Nombre: getTimeStart()
+//// Descripción: regresa el tiempo inicial del proceso
+//// Parametros: NO
+//// Return: double dTimeStart
+//////////////
 double Proceso::getTimeStart(){
     return dTimeStart;
 }
 
+///////////////
+//// Nombre: setTimeStart()
+//// Descripción: Guada el tiempo inicial del proceso
+//// Parametros: time
+//// Return: NO
+//////////////
 void Proceso::setTimeStart(double time){
     dTimeStart = time;
 }

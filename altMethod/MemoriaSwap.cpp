@@ -44,9 +44,11 @@ void MemoriaSwap::swapIn(Proceso& proceso, MemoriaReal& real, int paginaVirtual,
 
         std::cout << "SwapIn - PROCESO" << idProceso << " de Memoria SWAP en pagina " << paginaSwap
             << " se movio a Memoria REAL en pagina " << paginaReal << std::endl;
-        dTime+=0.1;
-        return;
+        //Se actualiza el tiempo, cada swap in toma 1s
+        dTime+=1.0;
+        //Se actiliza swaps.first, el # de swaps in
         swaps.first++;
+        return;
     }
 
     //primero es necesario un swap out
@@ -61,7 +63,9 @@ void MemoriaSwap::swapIn(Proceso& proceso, MemoriaReal& real, int paginaVirtual,
             << " en pagina " << paginaSwap << " se movio a Memoria REAL en pagina " << paginaProcesoReal.first << std::endl
             << "SwapOut - PROCESO " << paginaProcesoReal.second.second << " de Memoria REAL en pagina "
             << paginaProcesoReal.first << " se movio a Memoria SWAP en pagina " << paginaSwap << std::endl;
-            dTime+=2; //1 seg por el swap out y un 1 seg por el swap in
+            //Se actualiza el tiempo 1 seg por el swap out y un 1 seg por el swap in
+            dTime+=2;
+            //Se actuliza swaps.first, el # de swaps in y swaps.second, el # de swaps out
             swaps.first++;
             swaps.second++;
 

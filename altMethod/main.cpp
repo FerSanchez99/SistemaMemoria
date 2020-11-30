@@ -14,6 +14,7 @@ int main() {
     int tamProceso, idProceso, dirVirtual, bitModificacion;
     SistemaMemoria memoriaAdminFIFO;
     SistemaMemoria memoriaAdminLRU(false);
+    string sComment;
 
     while(opcion != 'E'){
         cin >> opcion;
@@ -105,6 +106,9 @@ int main() {
                 break;
             //comentarios
             case 'C':
+                getline(cin,sComment);
+                cout<<sComment<<endl;
+
                 break;
             //limpiar y dar estadisticas
             case 'F':

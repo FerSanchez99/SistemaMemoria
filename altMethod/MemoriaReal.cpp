@@ -75,7 +75,7 @@ void MemoriaReal::asignarProceso(Proceso& proceso, MemoriaSwap& swap, std::unord
             }
         }
 
-        //se suma el tiempo que se tardo en cargar a memoria real
+        //se suma el tiempo que se tardo en cargar a memoria real 1s por cada página
         dTime = dTime + (paginasProceso*1.0);
         return;
     }
@@ -92,6 +92,7 @@ void MemoriaReal::asignarProceso(Proceso& proceso, MemoriaSwap& swap, std::unord
             paginasLibres--;
 
             std::cout << "Se asigno PROCESO " << idProceso << " en Memoria REAL en pagina " << i << std::endl;
+            //se actualiza el tiempo sumando 1s por las páginas que si alcanzaron cupo
             dTime = dTime + 1.0;
         }
     }
@@ -108,7 +109,9 @@ void MemoriaReal::asignarProceso(Proceso& proceso, MemoriaSwap& swap, std::unord
         proceso.setIndexTablaDeMapeo(pags, std::make_pair(front.first, true));
 
         std::cout << "Se asigno PROCESO " << idProceso << " en Memoria REAL en pagina " << front.first << std::endl;
-        dTime = dTime + 2.0; //1 segundo por swap out y 1 segundo por loadear pagina
+        //Se actualiza el tiempo 1s por es swap out y 1s por el load a memoria real
+        dTime = dTime + 2.0;
+        //Se actualiza la cantidad de swaps que hubo el swap in y swap out ocurren en pares
         swaps++;
         politicaRemplazoLista.push_back(std::make_pair(front.first, idProceso));
         pags++;
