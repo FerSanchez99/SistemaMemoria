@@ -84,6 +84,7 @@ return vCantSwaps;
 void Stats::printStats(){
 cout<<endl;
 cout<<"------ Turnaround time por proceso -------"<<endl;
+if(vTA.size()==0) cout<<"NO HAY PROCESOS LIBERADOS"<<endl;
 for(int i=0;i<vTA.size();i++){
     cout<<"ID: "<<vTA[i].first<<" Turnaround: "<<vTA[i].second<<endl;
 }
@@ -103,7 +104,7 @@ cout<<"# Swaps out: "<<vCantSwaps.second<<endl;
 cout<<"# Swaps total: "<<vCantSwaps.first+vCantSwaps.second<<endl;
 cout<<"---------------------------"<<endl;
 
-cout<<vPF.size()<<endl;
+if(vPF.size()==0) cout<<"NO HAY PAGE FAULTS"<<endl;
 for(int i=0;i<vPF.size();i++){
     cout<<"ID: "<<vPF[i].first<<" "<<"# de Page Faults: "<<vPF[i].second<<endl;
 }

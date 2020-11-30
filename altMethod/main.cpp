@@ -133,5 +133,8 @@ int main() {
         }//switch
     }//while
 
+    cout<<" F I N   D E L   P R O G R A M A"<<endl;
+
+
     return 0;
 }
