@@ -3,35 +3,71 @@
 #include <math.h>
 #include <utility>
 
+/*
+ * SistemaMemoria
+ * Constructor default  
+ */
 SistemaMemoria::SistemaMemoria() { }
 
+/*
+ * SistemaMemoria
+ * Constructor que asigna si la politica es FIFO
+ * Params: 
+ * - esFIFO bool true si es FIFO, false si es LRU
+ */
 SistemaMemoria::SistemaMemoria(bool esFIFO) {
     real.setPoliticaFIFO(esFIFO);
 }
 
+/*
+ * getProceso
+ * Recibe un id de un proceso y regresa el proceso con ese id de la lista de procesos en ejecucion
+ * Params:
+ * - idProceso int Un entero que indica el id de un proceso
+ * Return:
+ * - Proceso el proceso con id IdProceso en la lista de procesos  
+ */
 Proceso SistemaMemoria::getProceso(int idProceso) {
     return listaProcesos[idProceso];
 }
 
+/*
+ * existeProceso
+ * Checa si existe un proceso en ejecucion de acuerdo al id recibido
+ * Params:
+ * - idProceso int Un entero que indica el id de un proceso
+ * Return:
+ * - bool true si existe un proceso con ese id, false si no existe
+ */
 bool SistemaMemoria::existeProceso(int idProceso) {
     return listaProcesos.find(idProceso) != listaProcesos.end();
 }
 
+/*
+ * Cargar proceso
+ * Carga un proceso en memoria, regresa si hubo exito en la ejecucion
+ * Params:
+ * - idProceso int Un entero que indica el id de un proceso
+ * - tamBytes int El tamano en bytes del proceso que se quiere asignar a memoria
+ * Return:
+ * - bool true si se asigno con exito, false si hubo algun fallo  
+ */
 bool SistemaMemoria::cargarProceso(int idProceso, int tamBytes) {
-
+    // Crea un proceso
     Proceso proceso(idProceso, tamBytes);
     proceso.setTimeStart(stats.getTime());
 
-
+    // Verifica que exista suficiente espacio para el proceso que se quiere asignar
     if (tamBytes > real.getTamBytes() ||
         (real.getPaginasLibres() + swap.getPaginasLibres()) < tamBytes / proceso.getTamPaginas() + (tamBytes % proceso.getTamPaginas() != 0)) {
         return false;
     }
 
+    // Se agrega proceso a la lista de procesos en el programa
     listaProcesos[idProceso] = proceso;
     listaProcesos[idProceso].setTimeStart(stats.getTime()) ;
 
-    //double para guardar el tiempo después de cargar las páginas del nuevo proceso
+    //double para guardar el tiempo despuï¿½s de cargar las pï¿½ginas del nuevo proceso
     double temp = stats.getTime();
     //int para guardar la cantidad swaps out que hubo, no hay swaps in cuando se carga un proceso nuevo a memoria
     int swaps=0;
@@ -47,12 +83,20 @@ bool SistemaMemoria::cargarProceso(int idProceso, int tamBytes) {
 
 }
 
+/*
+ * accederDirVirtualProceso
+ * Busca en donde se encuentra la direccion virtual de un proceso en la direccio real, realiza swapIn si es necesario
+ * Params:
+ * - dirVirtual int La direccion virtual de un proceso
+ * - idProceso int El id de un proceso
+ * - bitModificacion int El bit que indica si se esta leyendo o modificando la direccion virtual
+ */
 void SistemaMemoria::accederDirVirtualProceso(int dirVirtual, int idProceso, int bitModificacion ) {
     Proceso proceso = listaProcesos[idProceso];
 
     int paginaVirtual = dirVirtual / proceso.getTamPaginas();
     auto pagProceso = proceso.getPagTablaDeMapeo(paginaVirtual);
-    //si dicha página sí está en la memoria
+    //si dicha pagina si esta en la memoria
     if (pagProceso.second) {
         if (!real.esPoliticaFIFO()) {
             real.aplicarLRU(pagProceso.first, idProceso);
@@ -61,7 +105,7 @@ void SistemaMemoria::accederDirVirtualProceso(int dirVirtual, int idProceso, int
                 << " esta en la direccion real " << pagProceso.first * proceso.getTamPaginas() + (dirVirtual % proceso.getTamPaginas())
                 << " de la Memoria REAL" << std::endl;
 
-        //Acceder una página dentro de la memoria real se tarda 0.1s
+        //Acceder una pagina dentro de la memoria real se tarda 0.1s
         stats.setTime(stats.getTime()+0.1);
         return;
     }
@@ -69,7 +113,7 @@ void SistemaMemoria::accederDirVirtualProceso(int dirVirtual, int idProceso, int
 
 
 
-    //Pair para llevar conteo de los swaps al acceder a una dirección first swap in, second swap out
+    //Pair para llevar conteo de los swaps al acceder a una direcciï¿½n first swap in, second swap out
     pair<int,int> swaps(0,0);
     //double para guarda el tiempo despues de hacer los swaps in y swaps out necesarios
     double temp = stats.getTime();
@@ -95,7 +139,7 @@ void SistemaMemoria::accederDirVirtualProceso(int dirVirtual, int idProceso, int
                 break;
             }
         }
-        //si no encontró el proceso en vPF significa que es el primer page fault atribuido a ese proceso, crea un par correspondiente
+        //si no encontro el proceso en vPF significa que es el primer page fault atribuido a ese proceso, crea un par correspondiente
         if(b)
             stats.pushb(make_pair(idProceso,1));
     }
@@ -111,6 +155,12 @@ void SistemaMemoria::accederDirVirtualProceso(int dirVirtual, int idProceso, int
             << " de la Memoria REAL" << std::endl;
 }
 
+/*
+ * liberarProceso
+ * Libera las paginas ocupadas por un proceso
+ * Params:
+ * - idProceso int El ID del proceso que se quiere liberar de memoria  
+ */
 void SistemaMemoria::liberarProceso(int idProceso) {
     //antes de liberar el proceso se calcula su Turnaround y se guarda junto con su id.
     stats.calcTA(listaProcesos[idProceso].getTimeStart(),idProceso);
@@ -119,8 +169,12 @@ void SistemaMemoria::liberarProceso(int idProceso) {
     listaProcesos.erase(idProceso);
 }
 
+/*
+ * limpiarMemorias
+ * Resetea todas las memorias y estadisticas  
+ */
 void SistemaMemoria::limpiarMemorias() {
-    //se vuelven a restablecer las estadísticas junto con el tiempo
+    //se vuelven a restablecer las estadisticas junto con el tiempo
     stats.wipe();
     real.limpiarMemoria();
     swap.limpiarMemoria();
@@ -131,7 +185,7 @@ void SistemaMemoria::limpiarMemorias() {
 
 ///////////////
 //// Nombre: getStat()
-//// Descripción: Regresa las estadística del sistema de memoria
+//// Descripcion: Regresa las estadistica del sistema de memoria
 //// Parametros: NO
 //// Return: Stats stats
 //////////////
