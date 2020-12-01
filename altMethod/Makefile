@@ -1,6 +1,6 @@
 CFLAGS = -O
 CC = g++
-SRC = main.cpp SistemaMemoria.cpp MemoriaReal.cpp MemoriaSwap.cpp Proceso.cpp
+SRC = main.cpp SistemaMemoria.cpp MemoriaReal.cpp MemoriaSwap.cpp Proceso.cpp Stats.cpp
 OBJ = $(SRC:.cpp = .o)
 
 SistemaDeMemoria: $(OBJ)
