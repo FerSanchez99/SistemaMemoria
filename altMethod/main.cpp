@@ -1,14 +1,104 @@
 /*
     P R O G R A M A   P R I N C I P A L
+    Simular un administrador de memoria que recibe procesos, los asigna en memoria real
+    y realiza los swapIns y swapOuts que sean necesarios. Se incluye un manejador con
+    politica FIFO y uno de politica LRU.
 
+    Equipo de desarrollo:
+    Angel Guevara - A01570288
+    Ma. Fernanda Sanchez - A01570306
+    Mateo Espinosa - A00823972
 */
 
 #include "SistemaMemoria.h"
 #include <iostream>
 #include <string>
+#include <sstream>
 
 using namespace std;
 
+// Funcion para validar el input que se recibe
+void validInput(char &opcion, int &tamProceso, int &idProceso, int &dirVirtual, int &bitModificacion, string &comment) {
+    string line;
+    getline(cin, line);
+
+    stringstream ss(line);
+    string s;
+
+    // Leer primer caracter
+    // Verificar que sea solamente un char
+    if (!(ss >> s)) {
+        cout << "Mal input, intente de nuevo" << endl;
+        opcion = '-';
+        return;
+    }
+
+    if (s.size() != 1) {
+        cout << "Mal input, intente de nuevo" << endl;
+        opcion = '-';
+        return;
+    }
+
+    opcion = s[0];
+    opcion = toupper(opcion);
+    switch (opcion) {
+        case 'P':
+            // Verificar que los siguientes dos elementos sean enteros
+            if (!(ss >> tamProceso)) {
+                cout << "Mal input, intente de nuevo" << endl;
+                opcion = '-';
+                return;
+            }
+            if (!(ss >> idProceso)) {
+                cout << "Mal input, intente de nuevo" << endl;
+                opcion = '-';
+                return;
+            }
+            return;
+        case 'A':
+            // Verificar que los siguientes elementos sean enteros
+            if (!(ss >> dirVirtual)) {
+                cout << "Mal input, intente de nuevo" << endl;
+                opcion = '-';
+                return;
+            }
+            if (!(ss >> idProceso)) {
+                cout << "Mal input, intente de nuevo" << endl;
+                opcion = '-';
+                return;
+            }
+            if (!(ss >> bitModificacion)) {
+                cout << "Mal input, intente de nuevo" << endl;
+                opcion = '-';
+                return;
+            }
+            return;
+        case 'L':
+            // Verificar que sea entero
+            if (!(ss >> idProceso)) {
+                cout << "Mal input, intente de nuevo" << endl;
+                opcion = '-';
+                return;
+            }
+            return;
+        case 'C':
+            comment = ss.str();
+            if (comment.size() < 3) {
+                comment = "";
+                return;
+            }
+            comment = comment.substr(2);
+            return;
+        case 'F':
+            return;
+        case 'E':
+            return;
+        default:
+            cout << "Mal input, intente de nuevo" << endl;
+            opcion = '-';
+            return;
+    }
+}
 
 int main() {
     char opcion = ' ';
@@ -18,14 +108,12 @@ int main() {
     string sComment;
 
     while(opcion != 'E'){
-        cin >> opcion;
-        opcion = toupper(opcion);
+        validInput(opcion, tamProceso, idProceso, dirVirtual, bitModificacion, sComment);
 
         switch (opcion) {
 
             // load proceso a memoria
             case 'P':
-                cin >> tamProceso >> idProceso;
                 cout << "Cargar PROCESO con ID " << idProceso << " de tamano " << tamProceso << endl;
 
                 cout << "----------- POLITICA FIFO -------------------------" << endl;
@@ -55,7 +143,6 @@ int main() {
 
             //acceso a la dir virtual de proceso
             case 'A':
-                cin >> dirVirtual >> idProceso >> bitModificacion;
                 if (bitModificacion == 1) cout << "Modificar ";
                 else cout << "Acceder a ";
                 cout << "direccion virtual " << dirVirtual << " del PROCESO con ID " << idProceso << endl;
@@ -85,7 +172,6 @@ int main() {
                 break;
             //liberar memoria real
             case 'L':
-                cin >> idProceso;
                 cout << "Liberar PROCESO con ID " << idProceso << endl;
 
                 cout << "----------- POLITICA FIFO -------------------------" << endl;
@@ -107,7 +193,6 @@ int main() {
                 break;
             //comentarios
             case 'C':
-                getline(cin,sComment);
                 cout<<sComment<<endl;
 
                 break;
